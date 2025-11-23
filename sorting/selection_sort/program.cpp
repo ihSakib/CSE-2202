@@ -3,7 +3,6 @@ using namespace std;
 
 void selection_sort(vector<int> &arr)
 {
-
   int n = arr.size();
 
   for (size_t i = 0; i < n - 1; i++)
@@ -22,15 +21,20 @@ void selection_sort(vector<int> &arr)
   }
 }
 
-int main()
+void display(vector<int> &arr)
 {
-  vector<int> arr = {0, 4, -5, 10, 45, 3234, -232, 4, 5};
-  selection_sort(arr);
-
   for (auto i : arr)
   {
     cout << i << " ";
   }
+}
+
+int main()
+{
+  vector<int> arr = {0, 4, -5, 10, 45, 3234, -232, 4, 5};
+
+  selection_sort(arr);
+  display(arr);
 
   return 0;
 }
