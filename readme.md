@@ -42,7 +42,7 @@ Mostly using **C / C++**, but may include **Python** for testing or visualizatio
 
 2. Navigate to the folder:
    ```bash
-   cd algorithm-design-analysis
+   cd CSE-2202
    ```
 
 3. Compile (for C/C++):
