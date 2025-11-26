@@ -68,6 +68,45 @@ public:
     {
       dfs_util(index, visited);
     }
+    cout << endl;
+  }
+
+  void bfs_util(int index, vector<bool> &visited)
+  {
+    queue<int> q;
+    q.push(index);
+    visited[index] = true;
+
+    while (q.size() != 0)
+    {
+      int curr_index = q.front();
+      q.pop();
+      cout << nodes[curr_index] << " ";
+
+      for (size_t i = 0; i < size; i++)
+      {
+        if (adj_matrix[curr_index][i] and !visited[i])
+        {
+          q.push(i);
+          visited[i] = true;
+        }
+      }
+    }
+  }
+
+  void bfs(int node_val)
+  {
+    vector<bool> visited(size, false);
+    auto it = find(nodes.begin(), nodes.end(), node_val);
+    int index = (it == nodes.end()) ? -1 : it - nodes.begin();
+    if (index == -1)
+    {
+      cout << "Invalid node" << endl;
+      return;
+    }
+
+    bfs_util(index, visited);
+    cout << endl;
   }
 };
 
@@ -97,6 +136,7 @@ int main()
   // g.display();
 
   g.dfs('D');
+  g.bfs('D');
 
   return 0;
 }
