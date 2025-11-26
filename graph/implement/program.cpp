@@ -43,24 +43,60 @@ public:
       cout << endl;
     }
   }
+
+  void dfs_util(int index, vector<bool> &visited)
+  {
+    visited[index] = true;
+    cout << nodes[index] << " ";
+
+    for (size_t i = 0; i < size; i++)
+    {
+      if (adj_matrix[index][i] && !visited[i])
+      {
+        dfs_util(i, visited);
+      }
+    }
+  }
+
+  void dfs(int node_val)
+  {
+    vector<bool> visited(size, false);
+    auto it = find(nodes.begin(), nodes.end(), node_val);
+    int index = (it == nodes.end() ? -1 : it - nodes.begin());
+
+    if (index != -1)
+    {
+      dfs_util(index, visited);
+    }
+  }
 };
 
 int main()
 {
 
-  Graph g(4);
+  Graph g(7);
 
   g.addNode(0, 'A');
   g.addNode(1, 'B');
   g.addNode(2, 'C');
   g.addNode(3, 'D');
+  g.addNode(4, 'E');
+  g.addNode(5, 'F');
+  g.addNode(6, 'G');
 
-  g.addEdge(0, 1);
-  g.addEdge(0, 2);
-  g.addEdge(0, 3);
-  g.addEdge(1, 2);
+  g.addEdge(3, 0); // D - A
+  g.addEdge(0, 2); // A - C
+  g.addEdge(0, 3); // A - D
+  g.addEdge(0, 4); // A - E
+  g.addEdge(4, 2); // E - C
+  g.addEdge(2, 5); // C - F
+  g.addEdge(2, 1); // C - B
+  g.addEdge(2, 6); // C - G
+  g.addEdge(1, 5); // B - F
 
-  g.display();
+  // g.display();
+
+  g.dfs('D');
 
   return 0;
 }
