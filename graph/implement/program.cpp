@@ -5,26 +5,26 @@ class Graph
 {
 private:
   int size;
-  vector<vector<int>> adj_matrix;
   vector<char> nodes;
+  vector<vector<int>> adj_matrix;
 
 public:
-  Graph(int n = 0) : size(n), adj_matrix(n, vector<int>(n, 0)), nodes(n, ' ') {}
+  Graph(int n) : size(n), nodes(n, ' '), adj_matrix(n, vector<int>(n, 0)) {}
 
-  void addEdge(int u, int v)
+  void addNode(int i, char val)
   {
-    if (u >= 0 && u < size && v >= 0 && v < size)
+    if (i >= 0 and i < size)
     {
-      adj_matrix[u][v] = 1;
-      adj_matrix[v][u] = 1;
+      nodes[i] = val;
     }
   }
 
-  void addNode(int vertex, char data)
+  void addEdge(int u, int v)
   {
-    if (vertex >= 0 and vertex < size)
+    if (u >= 0 and u < size and v >= 0 and v < size)
     {
-      nodes[vertex] = data;
+      adj_matrix[u][v] = 1;
+      adj_matrix[v][u] = 1;
     }
   }
 
@@ -44,75 +44,70 @@ public:
     }
   }
 
-  void dfs_util(int index, vector<bool> &visited)
+  void dfs_util(int i, vector<bool> &tracker)
   {
-    visited[index] = true;
-    cout << nodes[index] << " ";
+    tracker[i] = true;
+    cout << nodes[i] << " -> ";
 
-    for (size_t i = 0; i < size; i++)
+    for (size_t j = 0; j < size; j++)
     {
-      if (adj_matrix[index][i] && !visited[i])
+      if (adj_matrix[i][j] and !tracker[j])
       {
-        dfs_util(i, visited);
+        dfs_util(j, tracker);
       }
     }
   }
 
-  void dfs(int node_val)
+  void dfs(char start)
   {
-    vector<bool> visited(size, false);
-    auto it = find(nodes.begin(), nodes.end(), node_val);
-    int index = (it == nodes.end() ? -1 : it - nodes.begin());
+    auto it = find(nodes.begin(), nodes.end(), start);
+    int i = it != nodes.end() ? it - nodes.begin() : -1;
 
-    if (index != -1)
+    if (i != -1)
     {
-      dfs_util(index, visited);
+      vector<bool> tracker(size, false);
+      dfs_util(i, tracker);
     }
-    cout << endl;
   }
 
-  void bfs_util(int index, vector<bool> &visited)
+  void bfs_util(int i, vector<bool> &tracker)
   {
     queue<int> q;
-    q.push(index);
-    visited[index] = true;
+    q.push(i);
+    tracker[i] = true;
 
-    while (q.size() != 0)
+    while (!q.empty())
     {
       int curr_index = q.front();
       q.pop();
-      cout << nodes[curr_index] << " ";
+      cout << nodes[curr_index] << " -> ";
 
       for (size_t i = 0; i < size; i++)
       {
-        if (adj_matrix[curr_index][i] and !visited[i])
+        if (adj_matrix[curr_index][i] and !tracker[i])
         {
           q.push(i);
-          visited[i] = true;
+          tracker[i] = true;
         }
       }
     }
   }
 
-  void bfs(int node_val)
+  void bfs(char start)
   {
-    vector<bool> visited(size, false);
-    auto it = find(nodes.begin(), nodes.end(), node_val);
-    int index = (it == nodes.end()) ? -1 : it - nodes.begin();
-    if (index == -1)
-    {
-      cout << "Invalid node" << endl;
-      return;
-    }
+    auto it = find(nodes.begin(), nodes.end(), start);
+    int i = it != nodes.end() ? it - nodes.begin() : -1;
 
-    bfs_util(index, visited);
-    cout << endl;
+    if (i != -1)
+    {
+      vector<bool> tracker(size, false);
+      bfs_util(i, tracker);
+    }
   }
 };
 
 int main()
 {
-
   Graph g(7);
 
   g.addNode(0, 'A');
@@ -133,9 +128,7 @@ int main()
   g.addEdge(2, 6); // C - G
   g.addEdge(1, 5); // B - F
 
-  // g.display();
-
-  g.dfs('D');
+  // g.dfs('A');
   g.bfs('D');
 
   return 0;
